@@ -12,17 +12,24 @@ if [ $nombre_arg -eq 0 ] ; then
     echo "-s -> Statistiques sur les étapes"
 
 else 
-    case [ $nombre_arg -eq 1 ] 
+    case "$nombre_arg" in
     #récupérer champs 2 (tout 1) et 6 (trier nom prénom ordre décroissant en prenant le nom) 
-    case [ $nombre_arg -eq 2 ]
+    d1) 
     #faire l'option d2
-    case [ $nombre_arg -eq 3 ]
+    ;;
+    d2)
     #faire l'option l
-    case [ $nombre_arg -eq 4 ]
+    ;;
+    t)
     #faire l'option t
-    case [ $nombre_arg -eq 5 ]
+    ;;
+    s)
     #faire l'option s
-
+    ;;
+    *)
+    ;;
+    esac
+    
     fi
 
 
