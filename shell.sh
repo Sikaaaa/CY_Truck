@@ -14,16 +14,20 @@ if [ $nombre_arg -eq 0 ] ; then
 else 
     case "$nombre_arg" in
     #récupérer champs 2 (tout 1) et 6 (trier nom prénom ordre décroissant en prenant le nom) 
-    d1) 
+    -d1) 
+    #faire l'option d1
+    cut -d';' -f2,6 data.csv |sort -t' '-k2,2nr| head -10 
+    ;;
+    -d2)
     #faire l'option d2
     ;;
-    d2)
+    -l)
     #faire l'option l
-    ;;
-    t)
+    ;; 
+    -t)
     #faire l'option t
     ;;
-    s)
+    -s)
     #faire l'option s
     ;;
     *)
