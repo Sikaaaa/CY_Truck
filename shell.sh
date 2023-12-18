@@ -16,7 +16,7 @@ else
     #récupérer champs 2 (tout 1) et 6 (trier nom prénom ordre décroissant en prenant le nom) 
     -d1) 
     #faire l'option d1
-    cut -d';' -f2,6 data.csv |sort -t' '-k2,2nr| head -10 
+    cut -d';' -f2,6 data.csv |sort -t' '-k2,2nr| head -10 > top_10.csv
     ;;
     -d2)
     #faire l'option d2
