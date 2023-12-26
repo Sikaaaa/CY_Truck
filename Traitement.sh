@@ -14,7 +14,7 @@ if [ -z $nombre_arg ] ; then
 
 else 
     case $nombre_arg in
-    '-d1') #option top 10 
+    '-d1') #récupérer les 10 conducteurs avec le plus de trajets 
     # Récupere l'heure au début de l'exe
     tmp_d=$(date +%s)
     
@@ -30,9 +30,14 @@ else
 
     # Calcule le temps d'exe en soustraillant les deux
     echo "Le temps d'execution est de" $((tmp_f - tmp_d)) "secondes"
+
+    #générer le graphique
+    gnuplot d1.gnu
+
     ;;
 
-    '-d2')
+    '-d2') #Récupérer les 10 conducteurs avec le plus de km au compteur
+
     # Récupere l'heure au début de l'exe
     tmp_d=$(date +%s)
 
@@ -46,9 +51,13 @@ else
 
     # Calcule le temps d'exe en soustraillant les deux
     echo "Le temps d'execution est de" $((tmp_f - tmp_d)) "secondes"
+
+    #générer le graphique 
+    gnuplot d2.gnu
     ;;
 
-    '-l')
+    '-l') # les 10 trajets les plus longs
+
     # Récupere l'heure au début de l'exe
     tmp_d=$(date +%s)
     
@@ -66,7 +75,10 @@ else
     # Calcule le temps d'exe en soustraillant les deux
     echo "Le temps d'execution est de" $((tmp_f - tmp_d)) "secondes"
 
+    #générer le graphique
+    gnuplot l.gnu
     ;; 
+
     '-t')
     #faire l'option t
     ;;
