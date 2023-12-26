@@ -33,7 +33,19 @@ else
     ;;
 
     '-d2')
-    #faire l'option d2
+    # Récupere l'heure au début de l'exe
+    tmp_d=$(date +%s)
+
+    awk -F';' '{tab[$6] += $5}
+        END {for (i in tab) printf "%d, %s \n", tab[i],i}' ./data/data.csv > ./temp/d2_tableau.csv
+    sort -n -r -t';' -k1 ./temp/d2_tableau.csv > ./temp/d2_tri.csv
+    head -10 ./temp/d2_tri.csv > ./data/d2_top_10.csv
+
+    # Récupere l'heure à la fin de l'exe
+    tmp_f=$(date +%s)
+
+    # Calcule le temps d'exe en soustraillant les deux
+    echo "Le temps d'execution est de" $((tmp_f - tmp_d)) "secondes"
     ;;
 
     '-l')
