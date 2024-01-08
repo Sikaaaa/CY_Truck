@@ -10,7 +10,7 @@
 
 ## Objectif 
 
-Le but de ce projet est de faire des tris en utilisant les données d'une entreprise et sortir des graphiques permettant de trier et lire certainnes données. 
+Le but de ce projet est de faire des tris à partir des données d'une entreprise. De là nous avons plusieurs options qui nous permettes de représenter ces tris sous formes de graphiques.
 
 ## Groupe 
 
@@ -18,11 +18,16 @@ Notre groupe est composé d'Orianne COURTADE, Héloïse DEY et Maellys AMAINI
 
 ## Fichiers
 
+Il y a plusieurs dossiers, data, demo, image, progc et la Racine
 
 ## Compiler 
 
+voir quand makefile sera terminé 
+
 ## Répartition 
 
+option l terminée (Héloïse/Orianne)
+voir les "petits trucs" (-h, temps d'exec, etc..)
 
 # CY_Truck
-Projet Informatique
+![CYTECH](https://github.com/Sikaaaa/CY_Truck/CY_Tech_logo.jpg)
