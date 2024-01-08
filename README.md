@@ -29,6 +29,9 @@ voir quand makefile sera terminé
 option l terminée (Héloïse/Orianne)
 voir les "petits trucs" (-h, temps d'exec, etc..)
 
-# CY_Truck
+# CY_Tech
+
+Notre l'école, autrice du projet
+
 ![CYTECH](https://github.com/Sikaaaa/CY_Truck/blob/main/CY_Tech_logo.jpg)
 

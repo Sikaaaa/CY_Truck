@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 
 // implémenter le code de l'avl et voir comment trier en l'utilisant
 typedef struct arbre{

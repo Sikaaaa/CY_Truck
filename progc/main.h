@@ -8,6 +8,7 @@
 //déclaration des bibliothèques
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 
 //déclaration structure utilisée
 typedef struct arbre{
