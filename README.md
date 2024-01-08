@@ -30,4 +30,4 @@ option l terminée (Héloïse/Orianne)
 voir les "petits trucs" (-h, temps d'exec, etc..)
 
 # CY_Truck
-![CYTECH](https://github.com/Sikaaaa/CY_Truck/CY_Tech_logo.jpg)
+![CYTECH](https://github.com/Sikaaaa/CY_Truck_2/CY_Truck/CY_Tech_logo.jpg)
