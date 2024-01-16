@@ -14,7 +14,7 @@ awk -F';' '$2 == 1 {tab[$6] += 1 }
     END {for (i in tab) printf "%d, %s \n", tab[i],i}' ./data/data.csv > ./temp/d1_tableau.csv
 
 sort -n -r -t';' -k1 ./temp/d1_tableau.csv > ./temp/d1_tri.csv
-head -10 ./temp/d1_tri.csv > ./data/d1_top_10.csv
+head -10 ./temp/d1_tri.csv > ./demo/d1_top_10.csv
 
 # Récupere l'heure à la fin de l'exe
 tmp_f=$(date +%s)
@@ -24,6 +24,7 @@ echo "Le temps d'execution est de" $((tmp_f - tmp_d)) "secondes"
 
 #générer le graphique
 gnuplot d1.gnu
+convert -rotate 90 ./image/Le_plus_de_trajet.png ./image/Le_plus_de_trajet1.png
 
 ;;
 
@@ -33,9 +34,7 @@ gnuplot d1.gnu
 tmp_d=$(date +%s)
 
 awk -F';' '{tab[$6] += $5}
-    END {for (i in tab) printf "%d, %s \n", tab[i],i}' ./data/data.csv > ./temp/d2_tableau.csv
-sort -n -r -t';' -k1 ./temp/d2_tableau.csv > ./temp/d2_tri.csv
-head -10 ./temp/d2_tri.csv > ./data/d2_top_10.csv
+    END {for (i in tab) printf "%d, %s \n", tab[i],i}' ./data/data.csv | sort -n -r -t';' -k1 | head -10 > ./demo/d2_top_10.csv
 
 # Récupere l'heure à la fin de l'exe
 tmp_f=$(date +%s)
@@ -43,8 +42,10 @@ tmp_f=$(date +%s)
 # Calcule le temps d'exe en soustraillant les deux
 echo "Le temps d'execution est de" $((tmp_f - tmp_d)) "secondes"
 
-#générer le graphique 
+# générer le graphique
 gnuplot d2.gnu
+convert -rotate 90 ./image/Les_conducteurs_avec_le_plus_de_km.png ./image/Les_conducteurs_avec_le_plus_de_km1.png
+
 ;;
 
 '-l') # les 10 trajets les plus longs
