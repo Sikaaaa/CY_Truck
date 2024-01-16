@@ -1,19 +1,6 @@
-#!/bin/bash 
+#!/bin/bash
 
-# Vérification de l'existence du dossier image
-if test -d "/image"; then
-    rm -r /image
-else
-    mkdir image
-fi
-# Vérification de l'existence du dossier temp
-if test -d "/temp"; then
-    rm -r /temp
-else
-    mkdir temp
-fi
 
-#fichier_csv = 'data.csv' # le fichier contenant toutes les données 
 nombre_arg=$*
 
 

@@ -24,6 +24,8 @@ avl * rotationg(avl *pavl);
 avl * rotationd(avl *pavl);
 avl * ajouterfilsgauche(avl *pavl, int nb);
 avl * ajouterfilsdroit(avl *pavl, int nb);
+avl * doublerotationg(avl *pavl, int nb);
+avl * doublerotationd(avl *pavl, int nb);
 int main();
 
 

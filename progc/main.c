@@ -64,6 +64,14 @@ avl * ajouterfilsdroit(avl *pavl, int nb){
     return pavl;
 }
 
+avl * doublerotationd(avl *pavl, int nb){
+
+}
+
+avl * doublerotationg(avl *pavl, int nb){
+
+}
+
 int main(){
     return 0;
 }
