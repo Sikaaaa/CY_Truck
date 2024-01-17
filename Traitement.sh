@@ -1,5 +1,15 @@
 #!/bin/bash
 
+# Vérification de l'existence du dossier image
+if test -d "image"; then
+    rm -r image
+fi
+mkdir image
+# Vérification de l'existence du dossier temp
+if test -d "temp"; then
+    rm -r temp
+fi
+mkdir temp
 
 nombre_arg=$*
 
@@ -54,12 +64,8 @@ convert -rotate 90 ./image/Les_conducteurs_avec_le_plus_de_km.png ./image/Les_co
 tmp_d=$(date +%s)
     
 #récupérer somme chaque étape 
-awk -F';' '{tab[$1] += $5} 
-    END {for (i in tab) printf "%d, %d \n", i,tab[i]}' ./data/data.csv > ./temp/l_tableau.csv
-        
-sort -n -r -t',' -k2 ./temp/l_tableau.csv > ./temp/l_tri.csv
-head -10 ./temp/l_tri.csv > ./temp/l_tri2.csv
-sort -n -t',' -k1 ./temp/l_tri2.csv > ./data/l_trajet_plus_long.csv
+awk -F';' '{tab[$1] += $5}
+    END {for (i in tab) printf "%d, %d \n", i,tab[i]}' ./data/data.csv | sort -n -r -t',' -k2 | head -10 | sort -n -t',' -k1 > ./data/l_trajet_plus_long.csv
 
 # Récupere l'heure à la fin de l'exe
 tmp_f=$(date +%s)

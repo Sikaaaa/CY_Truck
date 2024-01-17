@@ -20,4 +20,4 @@ set terminal pngcairo size 1080,1920
 
 # Charger les données depuis le fichier
 set datafile separator ','
-plot './data/d1_top_10.csv' using 1:xticlabels(2) axes x1y2 notitle
+plot './demp/d1_top_10.csv' using 1:xticlabels(2) axes x1y2 notitle
