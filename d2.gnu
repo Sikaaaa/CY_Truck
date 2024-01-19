@@ -24,5 +24,5 @@ set terminal pngcairo size 1080,1920 enhanced font 'Times New Roman, 13'
 
 # Charger les données depuis le fichier
 set datafile separator ','
-plot './data/d2_top_10.csv' using 1:xticlabels(2) axes x1y2 notitle
+plot './demo/d2_top_10.csv' using 1:xticlabels(2) axes x1y2 notitle
 

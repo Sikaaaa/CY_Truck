@@ -7,7 +7,7 @@ OBJ_DIR = obj
 # defines save directory
 SAVE_DIR = save
 # defines the executable name
-EXEC_NAME = CYdventure
+EXEC_NAME = CY_Truck
 
 # compile tout
 all: 

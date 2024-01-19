@@ -19,4 +19,5 @@ set yrange [0:3000]
 set xrange [*:*]
 
 # Charger les données depuis le fichier
+set datafile separator ','
 plot './data/l_trajet_plus_long.csv' using (2*$0+1):2:xticlabels(1) title "Distance" with boxes

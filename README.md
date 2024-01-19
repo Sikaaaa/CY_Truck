@@ -5,6 +5,7 @@
 - [Fichiers](#fichiers) Quels sont les fichiers et leurs fonctions
 - [Compiler](#compiler) Comment compiler le projet
 - [Répartition](#répartition) Répartition des tâches parmis les membres du groupe
+- [Sources](#sources) Les ressources sur lesquelles nous nous sommes basées
 
 ## Contenu
 
@@ -28,6 +29,10 @@ voir quand makefile sera terminé
 
 option l terminée (Héloïse/Orianne)
 voir les "petits trucs" (-h, temps d'exec, etc..)
+
+## Sources 
+
+gnuplot 
 
 # CY_Tech
 
