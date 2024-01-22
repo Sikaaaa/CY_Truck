@@ -1,3 +1,6 @@
+#récupérer le chemin absolue du fichier 
+CheminExecutable=system("realpath .")
+
 # Paramètres du graphique
 set terminal png
 set xlabel "Conducteurs"
@@ -5,7 +8,7 @@ set y2label "Nombre de km"
 set ylabel "Les conducteurs avec le plus de km au compteur"
 
 # Nom du fichier dans lequel le graphique apparaîtra
-set output "./image/Les_conducteurs_avec_le_plus_de_km.png"
+set output CheminExecutable ."/images/Les_conducteurs_avec_le_plus_de_km.png"
 
 
 # Type de graphique
@@ -24,5 +27,5 @@ set terminal pngcairo size 1080,1920 enhanced font 'Times New Roman, 13'
 
 # Charger les données depuis le fichier
 set datafile separator ','
-plot './demo/d2_top_10.csv' using 1:xticlabels(2) axes x1y2 notitle
+plot CheminExecutable .'/demo/d2_top_10.csv' using 1:xticlabels(2) axes x1y2 notitle
 
