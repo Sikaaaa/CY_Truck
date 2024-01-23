@@ -100,15 +100,45 @@ fi
 if [ -d "$CheminExecutable/temp" ]; then
     # Si le dossier temp existe déjà, il devra le vider avant l’exécution des traitements
     echo "Suppression des fichiers dans le repertoire $CheminExecutable/temp"
-    rm -f $CheminExecutable/temp/.
+    rm -f $CheminExecutable/temp/*.*
 else
     echo "Création du repertoire $CheminExecutable/temp"
     mkdir -p $CheminExecutable/temp
 fi
 
+
 if [ "$faire_d1" ]; then 
-    # Récupere l'heure au début de l'exe
     echo "faire option d1"
+
+    cat <<EOF > $CheminExecutable/scriptgnu/d1.gnu
+# Paramètres du graphique
+set terminal png
+set xlabel "Conducteurs"
+set y2label "Nombre de Trajets"
+set ylabel "Les dix meilleurs chauffeurs"
+
+# Nom du fichier dans lequel le graphique apparaîtra
+set output "$CheminExecutable/images/Le_plus_de_trajet.png"
+
+# Type de graphique
+set style data histograms
+set style fill solid
+set boxwidth 1.5
+
+# Pour que le graph soit dans le bon sens
+set xtics rotate
+set ytics rotate
+set y2tics rotate
+unset ytics; set y2tics mirror
+set terminal pngcairo size 1080,1920 enhanced font 'Times New Roman, 13'
+
+
+# Charger les données depuis le fichier
+set datafile separator ','
+plot '$CheminExecutable/data/d1_top_10.csv' using 1:xticlabels(2) axes x1y2 notitle
+EOF
+
+    # Récupere l'heure au début de l'exe
     tmp_d=$(date +%s)
     
     # récupérer champs 2 (tout 1) et 6 (trier nom prénom ordre décroissant en prenant le nom)
@@ -122,7 +152,7 @@ if [ "$faire_d1" ]; then
     echo "Le temps d'execution est de" $((tmp_f - tmp_d)) "secondes"
 
     #générer le graphique
-    gnuplot $CheminExecutable/d1.gnu
+    gnuplot $CheminExecutable/scriptgnu/d1.gnu
     convert -rotate 90 $CheminExecutable/images/Le_plus_de_trajet.png $CheminExecutable/images/Le_plus_de_trajet1.png
     rm -f $CheminExecutable/images/Le_plus_de_trajet.png
 
@@ -130,8 +160,37 @@ fi
 
 if [ "$faire_d2" ]; then
     echo "option d2" #Récupérer les 10 conducteurs avec le plus de km au compteur
+cat <<EOF > $CheminExecutable/scriptgnu/d2.gnu
+# Paramètres du graphique
+set terminal png
+set xlabel "Conducteurs"
+set y2label "Nombre de km"
+set ylabel "Les conducteurs avec le plus de km au compteur"
 
-    # Récupere l'heure au début de l'exe
+# Nom du fichier dans lequel le graphique apparaîtra
+set output "$CheminExecutable/images/Les_conducteurs_avec_le_plus_de_km.png"
+
+
+# Type de graphique
+set style data histograms
+set style fill solid
+set boxwidth 1.5
+
+
+# Pour que le graph soit dans le bon sens
+set xtics rotate
+set ytics rotate
+set y2tics rotate
+unset ytics; set y2tics mirror
+set terminal pngcairo size 1080,1920 enhanced font 'Times New Roman, 13'
+
+
+# Charger les données depuis le fichier
+set datafile separator ','
+plot '$CheminExecutable/demo/d2_top_10.csv' using 1:xticlabels(2) axes x1y2 notitle
+EOF
+
+
     tmp_d=$(date +%s)
        
     awk -F';' '{tab[$6] += $5}
@@ -153,6 +212,33 @@ fi
 if [ "$faire_l" ]; then
     echo "option l"     # les 10 trajets les plus longs
 
+    cat <<EOF > $CheminExecutable/scriptgnu/l.gnu
+
+#Paramètres du graphique
+set terminal pngcairo size 1920,1080 enhanced font 'Times New Roman, 13'
+set title "Les 10 trajets les plus longs"
+set ylabel "Distance en km"
+set xlabel "Id Route"
+
+#nom du fichier dans lequel le graphique apparaitra 
+set output "/$CheminExecutable/images/Les 10 trajets les plus longs.png" 
+
+# Type de graphique
+set style fill solid
+set boxwidth 0.5
+set size 1,1
+set border lc rgb 'black'
+set boxwidth 0.5 relativ
+
+# Plages des axes x et y
+set yrange [0:3000]
+set xrange [*:*]
+
+# Charger les données depuis le fichier
+set datafile separator ','
+plot CheminExecutable .'/data/l_trajet_plus_long.csv' using (2*$0+1):2:xticlabels(1) title "Distance" with boxes
+EOF
+
     # Récupere l'heure au début de l'exe
     tmp_d=$(date +%s)
 
@@ -169,4 +255,104 @@ if [ "$faire_l" ]; then
     #générer le graphique
     gnuplot $CheminExecutable/l.gnu
 
+fi
+
+# if [ "$faire_t" ]; then 
+#     echo "option_t"
+#     # Récupere l'heure au début de l'exe
+#     tmp_d=$(date +%s)
+            
+#     #récupérer somme chaque étape 
+#     # On n'a pas fait le cas de la ville de départ, compter le nombre de fois ou il est ville de départrajouter une colonne !  
+#     awk -F";" 'NR > 1 {tab[$1";"$4] +=1; if ($2==1) {tab[$1";"$3]+=1; deb[$1";"$3]=1}} END {for (ville in tab) print ville ";" tab[ville] ";" deb[ville] }' data/data.csv | awk -F";" '{tab[$2]+=1; deb[$2]+=$4} END {for (ville in tab) print ville ";" tab[ville] ";" deb[ville]}' > temp/t_tri.csv
+
+#     # Execution du code C qui tri en fonction du nombre de trajet dans l'ordre décroissant      
+#     `gcc -o $CheminExecutable/progc/t1 $CheminExecutable/progc/Fonction_t.c`
+#     resultat = $?
+#     if [ "$resultat" -ne "0" ]; then
+#         echo "Erreur de compilation de script Fonction_t.c"
+#         exit 1
+#     fi
+#     $CheminExecutable/progc/t1 > .$CheminExecutable/temp/t_top_non_trie.csv
+   
+#     # Execution du code C qui tri en fonction des noms de villes dans l'ordre alphabétique
+#     `gcc -o $CheminExecutable/progc/t2 $CheminExecutable/progc/Tri_nom.c`
+#     resultat = $?
+#     if [ "$resultat" -ne "0" ]; then
+#         echo "Erreur de compilation de script Tri_nom.c"
+#         exit 1
+#     fi
+#     $CheminExecutable/progc/t2 > .$CheminExecutable/data/t_top_10.csv
+
+#     # Récupere l'heure à la fin de l'exeempst.
+#     tmp_f=$(date +%s)
+
+#     # Calcule le temps d'exe en soustraillant les deux
+#     echo "Le temps d'execution est de" $((tmp_f - tmp_d)) "secondes"
+#     gnuplot $CheminExecutable/scriptgnu/t.gnu
+#     #si $? eq 0 -> exit, erreur 
+    
+# fi
+
+if [ -n "$faire_t" ]; then 
+    echo "option_t"
+
+    car <<EOF > $CheminExecutable/scriptgnu/t.gnu
+#Pramètres du graphique
+set terminal pngcairo size 1920,1080 enhanced font 'Times New Roman, 13'
+set title 'Les_10_villes_les_plus_traversées'
+set xlabel "Noms de villes"
+set ylabel "Nombre de routes"
+
+#nom du fichier dans lequel le graphique apparaitra 
+set output "$CheminExecutable/images/Les_10_villes_les_plus_traversées.png"
+
+#type de graphique 
+set style data histograms 
+set style fill solid border -1
+set boxwidth 0.8 relative
+set key autotitle columnheader
+set boxwidth 1.3 relative
+
+#charger les données dans le fichier puis générer le graph
+set datafile separator ','
+plot '$CheminExecutable/data/t_top_10.csv' using 2:xtic(1) title columnheader, '' using 3 title columnheader
+EOF
+
+
+    # Récupere l'heure au début de l'exe
+    tmp_d=$(date +%s)
+            
+    #récupérer somme chaque étape 
+    # On n'a pas fait le cas de la ville de départ, compter le nombre de fois ou il est ville de départrajouter une colonne !  
+    awk -F";" 'NR > 1 {tab[$1";"$4] +=1; if ($2==1) {tab[$1";"$3]+=1; deb[$1";"$3]=1}} END {for (ville in tab) print ville ";" tab[ville] ";" deb[ville] }' data/data.csv | awk -F";" '{tab[$2]+=1; deb[$2]+=$4} END {for (ville in tab) print ville ";" tab[ville] ";" deb[ville]}' > temp/t_tri.csv
+
+    # Execution du code C qui tri en fonction du nombre de trajet dans l'ordre décroissant      
+    gcc -o $CheminExecutable/progc/t1 $CheminExecutable/progc/Fonction_t.c
+    resultat=$?
+    if [ "$resultat" -ne 0 ]; then
+        echo "Erreur de compilation de script Fonction_t.c"
+        exit 1
+    fi
+
+    cd $CheminExecutable/progc
+    ./t1 > .$CheminExecutable/temp/t_top_non_trie.csv
+   
+    # Execution du code C qui tri en fonction des noms de villes dans l'ordre alphabétique
+    gcc -o $CheminExecutable/progc/t2 $CheminExecutable/progc/Tri_nom.c
+    resultat=$?
+    if [ "$resultat" -ne 0 ]; then
+        echo "Erreur de compilation de script Tri_nom.c"
+        exit 1
+    fi
+    cd $CheminExecutable/progc
+    ./t2 > .$CheminExecutable/data/t_top_10.csv
+
+    # Récupere l'heure à la fin de l'exeempst.
+    tmp_f=$(date +%s)
+
+    # Calcule le temps d'exe en soustraillant les deux
+    echo "Le temps d'execution est de" $((tmp_f - tmp_d)) "secondes"
+    gnuplot $CheminExecutable/scriptgnu/t.gnu
+    #si $? eq 0 -> exit, erreur 
 fi

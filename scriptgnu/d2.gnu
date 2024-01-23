@@ -1,21 +1,18 @@
-#récupérer le chemin absolue du fichier 
-CheminExecutable=system("realpath .")
-
-print "Le chemin absolu du répertoire en cours est :", CheminExecutable
-
 # Paramètres du graphique
 set terminal png
 set xlabel "Conducteurs"
-set y2label "Nombre de Trajets"
-set ylabel "Les dix meilleurs chauffeurs"
+set y2label "Nombre de km"
+set ylabel "Les conducteurs avec le plus de km au compteur"
 
 # Nom du fichier dans lequel le graphique apparaîtra
-set output CheminExecutable ."/images/Le_plus_de_trajet.png"
+set output "/data/Documents/Projet/Informatique/Preing_2/CY_Truck_2/CY_Truck/images/Les_conducteurs_avec_le_plus_de_km.png"
+
 
 # Type de graphique
 set style data histograms
 set style fill solid
 set boxwidth 1.5
+
 
 # Pour que le graph soit dans le bon sens
 set xtics rotate
@@ -27,4 +24,4 @@ set terminal pngcairo size 1080,1920 enhanced font 'Times New Roman, 13'
 
 # Charger les données depuis le fichier
 set datafile separator ','
-plot CheminExecutable .'/data/d1_top_10.csv' using 1:xticlabels(2) axes x1y2 notitle
+plot '/data/Documents/Projet/Informatique/Preing_2/CY_Truck_2/CY_Truck/demo/d2_top_10.csv' using 1:xticlabels(2) axes x1y2 notitle

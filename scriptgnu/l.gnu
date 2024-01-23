@@ -1,5 +1,3 @@
-#récupérer le chemin absolue du fichier 
-CheminExecutable=system("realpath .")
 
 #Paramètres du graphique
 set terminal pngcairo size 1920,1080 enhanced font 'Times New Roman, 13'
@@ -8,7 +6,7 @@ set ylabel "Distance en km"
 set xlabel "Id Route"
 
 #nom du fichier dans lequel le graphique apparaitra 
-set output CheminExecutable ."/images/Les 10 trajets les plus longs.png" 
+set output "//data/Documents/Projet/Informatique/Preing_2/CY_Truck_2/CY_Truck/images/Les 10 trajets les plus longs.png" 
 
 # Type de graphique
 set style fill solid
@@ -23,4 +21,4 @@ set xrange [*:*]
 
 # Charger les données depuis le fichier
 set datafile separator ','
-plot CheminExecutable .'/data/l_trajet_plus_long.csv' using (2*$0+1):2:xticlabels(1) title "Distance" with boxes
+plot CheminExecutable .'/data/l_trajet_plus_long.csv' using (2*./traitement.sh+1):2:xticlabels(1) title "Distance" with boxes
