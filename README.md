@@ -49,9 +49,9 @@ voir les "petits trucs" (-h, temps d'exec, etc..)
 
 ## Sources 
 
-gnuplot
-sources: gestion des paramètres en bash
-https://debian-facile.org/utilisateurs:david5647:tutos:bash-gerer-les-parametres
+gnuplot   
+sources: gestion des paramètres en bash  
+https://debian-facile.org/utilisateurs:david5647:tutos:bash-gerer-les-parametres  
 
 # CY_Tech
 
