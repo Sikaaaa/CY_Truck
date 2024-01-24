@@ -19,11 +19,28 @@ Notre groupe est composé d'Orianne COURTADE, Héloïse DEY et Maellys AMAINI
 
 ## Fichiers
 
-Il y a plusieurs dossiers, data, demo, image, progc et la Racine
+Il y a plusieurs dossiers, data, demo, images, progc et la Racine
 
 ## Compiler 
 
-voir quand makefile sera terminé 
+La compilation se fait a travers du fichier Makefile se trouvant dans le répertoire progc.
+Il est possible de nettoyer manuellement ce répertoire en utilisant la commande suivante:
+```
+cd progc/
+make clean
+```
+
+## Utilsiation de l'application
+
+Une fois le projet github récupéré sur le PC, vous devez utiliser la commande suivante pour rendre le script shell exécutable:
+```
+chmod 755 Traitement.sh
+```
+
+Vous pouvez utilsier la commande suivante pour afficher l'aide:
+```
+./Traitement.sh -h
+``` 
 
 ## Répartition 
 
@@ -32,7 +49,9 @@ voir les "petits trucs" (-h, temps d'exec, etc..)
 
 ## Sources 
 
-gnuplot 
+gnuplot
+sources: gestion des paramètres en bash
+https://debian-facile.org/utilisateurs:david5647:tutos:bash-gerer-les-parametres
 
 # CY_Tech
 
