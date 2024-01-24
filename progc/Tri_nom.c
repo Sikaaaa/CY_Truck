@@ -202,15 +202,15 @@ AVL * donnee_n(char *nom_f) {
     char ligne[500];
 
     while (fgets(ligne, sizeof(ligne), fichier) != NULL) {
-        char *token = strtok(ligne, ";");
+        char *token = strtok(ligne, ",");
         if (token != NULL) {
             Ville * v = malloc(sizeof(Ville));
             v->nom = strdup(token);
 
-            token = strtok(NULL, ";");
+            token = strtok(NULL, ",");
             v->trajets_total= atoi(token);
 
-            token = strtok(NULL, ";");
+            token = strtok(NULL, ",");
             v->trajets_depart = atoi(token);
 
             int h = 0;
@@ -226,7 +226,7 @@ void affichage(AVL * a, int * cpt){
     if (a != NULL && *cpt > 0) {
             affichage(a->gch,cpt);
         if (*cpt > 0) {
-            int h = 0;
+            // int h = 0;
             printf("%s,%d,%d\n", a->ville->nom, a->ville->trajets_total, a->ville->trajets_depart);
             (*cpt)--;
         }
@@ -258,7 +258,6 @@ int main(int n, char *parametre[]){
         fprintf(stderr, "%s : Nombre de paramètres incorrect, un fichier est attendu \n", parametre[0]); // Ecrire l'erreur dans la sortie stderr
         return 1;
     }
-
     AVL * avl = donnee_n(parametre[1]); 
     int compte  = 10;
 

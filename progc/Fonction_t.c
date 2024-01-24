@@ -195,15 +195,15 @@ AVL * donnee_t(char *nom_f) {
     char ligne[500];
 
     while (fgets(ligne, sizeof(ligne), fichier) != NULL) {
-        char *token = strtok(ligne, ";");
+        char *token = strtok(ligne, ",");
         if (token != NULL) {
             Ville * v = malloc(sizeof(Ville));
             v->nom = strdup(token);
 
-            token = strtok(NULL, ";");
+            token = strtok(NULL, ",");
             v->trajets_total= atoi(token);
 
-            token = strtok(NULL, ";");
+            token = strtok(NULL, ",");
             v->trajets_depart = atoi(token);
 
             int h = 0;
@@ -222,7 +222,7 @@ void affichage(AVL * a, int * cpt){
             affichage(a->drt,cpt);
         if (*cpt > 0) {
             int h = 0;
-            printf("%s;%d;%d\n", a->ville->nom, a->ville->trajets_total, a->ville->trajets_depart);
+            printf("%s,%d,%d\n", a->ville->nom, a->ville->trajets_total, a->ville->trajets_depart);
             (*cpt)--;
         }
            affichage(a->gch,cpt);
