@@ -30,7 +30,7 @@ cd progc/
 make clean
 ```
 
-## Utilsiation de l'application
+## Utilisation de l'application
 
 Une fois le projet github récupéré sur le PC, vous devez utiliser la commande suivante pour rendre le script shell exécutable:
 ```
