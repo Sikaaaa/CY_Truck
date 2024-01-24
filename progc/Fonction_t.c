@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include<math.h>
+#include <math.h>
 
 //Structure représentant une ville
 typedef struct Ville{
@@ -188,7 +188,8 @@ AVL * donnee_t(char *nom_f) {
     FILE *fichier = NULL;
     fichier = fopen(nom_f, "r");
     if (fichier == NULL) {
-        exit(1);
+        fprintf(stderr, "Le fichier %s est inconnu \n", nom_f); // Ecrire l'erreur dans la sortie stderr
+        exit(2);
     }
     AVL * a = NULL;
     char ligne[500];
@@ -247,11 +248,18 @@ void libererAVL(AVL * a){
 }
 
 
-int main(){
-    AVL * avl = donnee_t("temp/t_tri.csv"); // voir le dossier
-    int compte  = 10;
+int main(int n, char *parametre[]){
+    
+    if ( n != 2){
+        fprintf(stderr, "%s : Nombre de paramètres incorrect, un fichier est attendu \n", parametre[0]); // Ecrire l'erreur dans la sortie stderr
+        return 1;
+    }
 
+    AVL * avl = donnee_t(parametre[1]); 
+    int compte  = 10;
+    
     affichage(avl, &compte);
     libererAVL(avl);
+
     return 0;
 }

@@ -195,7 +195,8 @@ AVL * donnee_n(char *nom_f) {
     FILE *fichier = NULL;
     fichier = fopen(nom_f, "r");
     if (fichier == NULL) {
-        exit(1);
+        fprintf(stderr, "Le fichier %s est inconnu \n", nom_f); // Ecrire l'erreur dans la sortie stderr
+        exit(2);
     }
     AVL * a = NULL;
     char ligne[500];
@@ -251,8 +252,14 @@ void libererAVL(AVL * a){
 }
 
 
-int main(){
-    AVL * avl = donnee_n("temp/t_top_non_trie.csv"); // voir le dossier
+int main(int n, char *parametre[]){
+
+    if ( n != 2){
+        fprintf(stderr, "%s : Nombre de paramètres incorrect, un fichier est attendu \n", parametre[0]); // Ecrire l'erreur dans la sortie stderr
+        return 1;
+    }
+
+    AVL * avl = donnee_n(parametre[1]); 
     int compte  = 10;
 
     printf("Ville,Nombre de trajets,Nombre de depart\n");

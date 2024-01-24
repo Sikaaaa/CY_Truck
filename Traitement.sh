@@ -15,7 +15,7 @@ fichier_de_donnees=$1
 shift
 
 if [ "$fichier_de_donnees" == "-h"  ]; then
-            #echo "option -h"
+            echo "option -h"
             message_h
             exit 0  
 fi
@@ -65,18 +65,18 @@ while getopts ":hd:lts" arg; do
             ;;
         h) 
             message_h
-            exit 1
+            exit 0
             ;;
             
         :)
             echo "ERREUR: l'option -${OPTARG} nécessite un argument."
-                message_h
-                exit 1
+            message_h
+            exit 1
             ;;
 
         \?)
             echo "ERREUR: Option invalide"
-            message_aide
+            message_h
             exit 1
             ;;
 
@@ -105,6 +105,35 @@ else
     echo "Création du repertoire $CheminExecutable/temp"
     mkdir -p $CheminExecutable/temp
 fi
+
+#vérifier si le dossier scriptgnu existe, sinon le créer
+if [ ! -d "$CheminExecutable/scriptgnu" ]; then
+    echo "Création du repertoire $CheminExecutable/scriptgnu"
+    mkdir -p $CheminExecutable/scriptgnu
+fi
+
+# Test si les executables de l'option t existent sinon les créer
+if [ ! -f "$CheminExecutable/progc/CY_Truck_t1" ] || [ ! -f "$CheminExecutable/progc/CY_Truck_t2" ]; then
+    # Execution du code C qui tri en fonction du nombre de trajet dans l'ordre décroissant      
+    cd $CheminExecutable/progc
+    make CY_Truck_t
+    resultat=$?
+    if [ "$resultat" -ne 0 ]; then
+        echo "Erreur de compilation des scripts C pour l'option t"
+        exit 1
+    fi
+fi
+
+# if [ ! -f "$CheminExecutable/progc/CY_Truck_s" ]; then
+#     # Execution du code C qui tri en fonction du nombre de trajet dans l'ordre décroissant      
+#     cd $CheminExecutable/progc
+#     make CY_Truck_s
+#     resultat=$?
+#     if [ "$resultat" -ne 0 ]; then
+#         echo "Erreur de compilation des scripts C pour l'option s"
+#         exit 1
+#     fi
+# fi
 
 
 if [ "$faire_d1" ]; then 
@@ -143,7 +172,7 @@ EOF
     
     # récupérer champs 2 (tout 1) et 6 (trier nom prénom ordre décroissant en prenant le nom)
     awk -F';' '$2 == 1 {tab[$6] += 1 }
-        END {for (i in tab) printf "%d,%s\n", tab[i],i}' $CheminExecutable/data/data.csv | sort -n -r -t';' -k1 | head -10  > $CheminExecutable/data/d1_top_10.csv
+        END {for (i in tab) printf "%d,%s\n", tab[i],i}' $fichier_de_donnees | sort -n -r -t';' -k1 | head -10  > $CheminExecutable/data/d1_top_10.csv
 
     # Récupere l'heure à la fin de l'exe
     tmp_f=$(date +%s)
@@ -194,8 +223,8 @@ EOF
     tmp_d=$(date +%s)
        
     awk -F';' '{tab[$6] += $5}
-       END {for (i in tab) printf "%d,%s\n", tab[i],i}' $CheminExecutable/data/data.csv | sort -n -r -t';' -k1 | head -10 > $CheminExecutable/data/d2_top_10.csv
-       
+       END {for (i in tab) printf "%d,%s\n", tab[i],i}' $fichier_de_donnees | sort -n -r -t';' -k1 | head -10 > $CheminExecutable/data/d2_top_10.csv
+    
     # Récupere l'heure à la fin de l'exe
     tmp_f=$(date +%s)
        
@@ -203,7 +232,7 @@ EOF
     echo "Le temps d'execution est de" $((tmp_f - tmp_d)) "secondes"
        
     # générer le graphique
-    gnuplot $CheminExecutable/d2.gnu
+    gnuplot $CheminExecutable/scriptgnu/d2.gnu
     convert -rotate 90 $CheminExecutable/images/Les_conducteurs_avec_le_plus_de_km.png $CheminExecutable/images/Les_conducteurs_avec_le_plus_de_km1.png  
     rm -f $CheminExecutable/images/Les_conducteurs_avec_le_plus_de_km.png
 
@@ -236,7 +265,7 @@ set xrange [*:*]
 
 # Charger les données depuis le fichier
 set datafile separator ','
-plot CheminExecutable .'/data/l_trajet_plus_long.csv' using (2*$0+1):2:xticlabels(1) title "Distance" with boxes
+plot $CheminExecutable/data/l_trajet_plus_long.csv' using (2*$0+1):2:xticlabels(1) title "Distance" with boxes
 EOF
 
     # Récupere l'heure au début de l'exe
@@ -244,7 +273,7 @@ EOF
 
     #récupérer somme chaque étape 
     awk -F';' '{tab[$1] += $5}
-        END {for (i in tab) printf "%d,%d\n", i,tab[i]}' $CheminExecutable/data/data.csv | sort -n -r -t',' -k2 | head -10 | sort -n -t',' -k1 > $CheminExecutable/data/l_trajet_plus_long.csv
+        END {for (i in tab) printf "%d,%d\n", i,tab[i]}' $fichier_de_donnees | sort -n -r -t',' -k2 | head -10 | sort -n -t',' -k1 > $CheminExecutable/data/l_trajet_plus_long.csv
 
     # Récupere l'heure à la fin de l'exe
     tmp_f=$(date +%s)
@@ -253,46 +282,9 @@ EOF
     echo "Le temps d'execution est de" $((tmp_f - tmp_d)) "secondes"
 
     #générer le graphique
-    gnuplot $CheminExecutable/l.gnu
+    gnuplot $CheminExecutable/scriptgnu/l.gnu
 
 fi
-
-# if [ "$faire_t" ]; then 
-#     echo "option_t"
-#     # Récupere l'heure au début de l'exe
-#     tmp_d=$(date +%s)
-            
-#     #récupérer somme chaque étape 
-#     # On n'a pas fait le cas de la ville de départ, compter le nombre de fois ou il est ville de départrajouter une colonne !  
-#     awk -F";" 'NR > 1 {tab[$1";"$4] +=1; if ($2==1) {tab[$1";"$3]+=1; deb[$1";"$3]=1}} END {for (ville in tab) print ville ";" tab[ville] ";" deb[ville] }' data/data.csv | awk -F";" '{tab[$2]+=1; deb[$2]+=$4} END {for (ville in tab) print ville ";" tab[ville] ";" deb[ville]}' > temp/t_tri.csv
-
-#     # Execution du code C qui tri en fonction du nombre de trajet dans l'ordre décroissant      
-#     `gcc -o $CheminExecutable/progc/t1 $CheminExecutable/progc/Fonction_t.c`
-#     resultat = $?
-#     if [ "$resultat" -ne "0" ]; then
-#         echo "Erreur de compilation de script Fonction_t.c"
-#         exit 1
-#     fi
-#     $CheminExecutable/progc/t1 > .$CheminExecutable/temp/t_top_non_trie.csv
-   
-#     # Execution du code C qui tri en fonction des noms de villes dans l'ordre alphabétique
-#     `gcc -o $CheminExecutable/progc/t2 $CheminExecutable/progc/Tri_nom.c`
-#     resultat = $?
-#     if [ "$resultat" -ne "0" ]; then
-#         echo "Erreur de compilation de script Tri_nom.c"
-#         exit 1
-#     fi
-#     $CheminExecutable/progc/t2 > .$CheminExecutable/data/t_top_10.csv
-
-#     # Récupere l'heure à la fin de l'exeempst.
-#     tmp_f=$(date +%s)
-
-#     # Calcule le temps d'exe en soustraillant les deux
-#     echo "Le temps d'execution est de" $((tmp_f - tmp_d)) "secondes"
-#     gnuplot $CheminExecutable/scriptgnu/t.gnu
-#     #si $? eq 0 -> exit, erreur 
-    
-# fi
 
 if [ -n "$faire_t" ]; then 
     echo "option_t"
@@ -319,34 +311,28 @@ set datafile separator ','
 plot '$CheminExecutable/data/t_top_10.csv' using 2:xtic(1) title columnheader, '' using 3 title columnheader
 EOF
 
-
     # Récupere l'heure au début de l'exe
     tmp_d=$(date +%s)
             
     #récupérer somme chaque étape 
     # On n'a pas fait le cas de la ville de départ, compter le nombre de fois ou il est ville de départrajouter une colonne !  
-    awk -F";" 'NR > 1 {tab[$1";"$4] +=1; if ($2==1) {tab[$1";"$3]+=1; deb[$1";"$3]=1}} END {for (ville in tab) print ville ";" tab[ville] ";" deb[ville] }' data/data.csv | awk -F";" '{tab[$2]+=1; deb[$2]+=$4} END {for (ville in tab) print ville ";" tab[ville] ";" deb[ville]}' > temp/t_tri.csv
+    awk -F";" 'NR > 1 {tab[$1";"$4] +=1; if ($2==1) {tab[$1";"$3]+=1; deb[$1";"$3]=1}} END {for (ville in tab) print ville ";" tab[ville] ";" deb[ville] }' $fichier_de_donnees | awk -F";" '{tab[$2]+=1; deb[$2]+=$4} END {for (ville in tab) print ville ";" tab[ville] ";" deb[ville]}' > $CheminExecutable/temp/t_tri.csv #oc
 
-    # Execution du code C qui tri en fonction du nombre de trajet dans l'ordre décroissant      
-    gcc -o $CheminExecutable/progc/t1 $CheminExecutable/progc/Fonction_t.c
+
+    $CheminExecutable/progc/CY_Truck_t1 $CheminExecutable/temp/t_tri.csv > $CheminExecutable/temp/t_top_non_trie.csv # oc
     resultat=$?
     if [ "$resultat" -ne 0 ]; then
-        echo "Erreur de compilation de script Fonction_t.c"
+        echo "Erreur d'execution de la fonction CY_Truck_t1"
         exit 1
-    fi
+    fi 
 
-    cd $CheminExecutable/progc
-    ./t1 > .$CheminExecutable/temp/t_top_non_trie.csv
-   
-    # Execution du code C qui tri en fonction des noms de villes dans l'ordre alphabétique
-    gcc -o $CheminExecutable/progc/t2 $CheminExecutable/progc/Tri_nom.c
+    # Execution du code C qui tri en fonction des noms de villes dans l'ordre alphabétique    
+    $CheminExecutable/progc/CY_Truck_t2 $CheminExecutable/temp/t_top_non_trie.csv > $CheminExecutable/data/t_top_10.csv
     resultat=$?
     if [ "$resultat" -ne 0 ]; then
-        echo "Erreur de compilation de script Tri_nom.c"
+        echo "Erreur d'execution de la fonction CY_Truck_t2"
         exit 1
-    fi
-    cd $CheminExecutable/progc
-    ./t2 > .$CheminExecutable/data/t_top_10.csv
+    fi 
 
     # Récupere l'heure à la fin de l'exeempst.
     tmp_f=$(date +%s)
@@ -354,5 +340,26 @@ EOF
     # Calcule le temps d'exe en soustraillant les deux
     echo "Le temps d'execution est de" $((tmp_f - tmp_d)) "secondes"
     gnuplot $CheminExecutable/scriptgnu/t.gnu
-    #si $? eq 0 -> exit, erreur 
 fi
+
+if [ $faire_s ]; then 
+    echo "option s"
+
+    cat <<EOF > $CheminExecutable/scriptgnu/s.gnu
+
+#Paramètres du graphique
+set terminal pngcairo size 1920,1080 enhanced font 'Times New Roman, 13'
+set title "statistiques trajets"
+set ylabel "y"
+set xlabel "x"
+
+#nom du fichier dans lequel le graphique apparaitra 
+set output "$CheminExecutable/images/statistiques.png"
+
+EOF
+
+    gnuplot $CheminExecutable/scriptgnu/s.gnu
+
+fi 
+
+
