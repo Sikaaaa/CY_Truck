@@ -40,10 +40,10 @@ while getopts ":hd:lts" arg; do
 
         d) # Les options qui commencent par d et qui doivent avoir un argument supplémentaire
             if [ ${OPTARG} -eq "1" ]; then
-                echo "option -d1"
+                #echo "option -d1"
                 faire_d1=true
             elif [ ${OPTARG} -eq "2" ]; then
-                echo "option -d2"
+                #echo "option -d2"
                 faire_d2=true
             else
                 echo "option -d${OPTARG} invalide"
@@ -188,10 +188,10 @@ EOF
         END {for (i in tab) printf "%d,%s\n", tab[i],i}' $fichier_de_donnees | sort -n -r -t';' -k1 | head -10  > $CheminExecutable/temp/d1_top_10.csv
 
     # Récupere l'heure à la fin de l'exécution
-    tmp_f=$(date +data%s)
+    tmp_f=$(date +%s)
             
     # Calcule le temps d'exécution en soustraillant les deux
-    echo "Le temps d'execution est de" $((tmp_f - tmp_d)) "secondes"
+    echo "Le temps d'execution de l'option -d1 est de" $((tmp_f - tmp_d)) "secondes"
 
     # Générer le graphique
     gnuplot $CheminExecutable/scriptgnu/d1.gnu
@@ -245,7 +245,7 @@ EOF
     tmp_f=$(date +%s)
        
     # Calcule le temps d'exécution en soustraillant les deux
-    echo "Le temps d'execution est de" $((tmp_f - tmp_d)) "secondes"
+    echo "Le temps d'execution de l'option -d2 est de" $((tmp_f - tmp_d)) "secondes"
        
     # Générer le graphique
     gnuplot $CheminExecutable/scriptgnu/d2.gnu 
@@ -266,7 +266,7 @@ set ylabel "Distance en km"
 set xlabel "Id Route"
 
 #nom du fichier dans lequel le graphique apparaitra 
-set output "/$CheminExecutable/images/Les 10 trajets les plus longs.png" 
+set output "/$CheminExecutable/images/Les_10_trajets_les_plus_longs.png" 
 
 # Type de graphique
 set style fill solid
@@ -295,7 +295,7 @@ EOF
     tmp_f=$(date +%s)
 
     # Calcule le temps d'exécution en soustraillant les deux
-    echo "Le temps d'execution est de" $((tmp_f - tmp_d)) "secondes"
+    echo "Le temps d'execution de l'option -l est de" $((tmp_f - tmp_d)) "secondes"
 
     # Générer le graphique
     gnuplot $CheminExecutable/scriptgnu/l.gnu 
@@ -354,13 +354,13 @@ EOF
     tmp_f=$(date +%s)
 
     # Calcule le temps d'exécution en soustraillant les deux
-    echo "Le temps d'execution est de" $((tmp_f - tmp_d)) "secondes"
+    echo "Le temps d'execution de l'option -t est de" $((tmp_f - tmp_d)) "secondes"
     gnuplot $CheminExecutable/scriptgnu/t.gnu
 fi
 
 
 if [ "$faire_s" ]; then 
-    #echo "faire option -s"
+    echo "faire option -s"
     # A finaliser
 
 fi
