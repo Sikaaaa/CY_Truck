@@ -16,7 +16,8 @@ Auteurs:
  	courtadeor@cy-tech.fr
 
 
-Le contenu du Projet
+Le contenu du Projet:
+
 	- data 	:Le dossier contenant le fichier CSV avec les données des trajets.
 	- progc 	:LE dossier contenant le programme C et le Makefile.
 	- images	:LE dossier où seront stockées les images générées.
@@ -27,7 +28,8 @@ Le contenu du Projet
 
 
 Le Script Shell:
-	Il est situé à la racine du projet et il vérifie la présence de l'exécutable C, le compile si nécessaire et effectue le traitement des données en fonction des option. Il gère la création et le nettoyage des répertoires nécessaires et produit des représentations graphiques des données traitées à l'aide de Gnuplot.
+
+	Il est situé à la racine du projet et il vérifie la présence de l'exécutable C, le compile si nécessaire et effectue le traitement des données en fonction des option. Il gère la création et le nettoyage des répertoires nécessaires et 	produit des représentations graphiques des données traitées à l'aide de Gnuplot.
 
 
 
@@ -39,7 +41,7 @@ Les Fichiers de Données :
 
   Les fichiers résultats, les fichiers intermédiaires et images stockés dans le répertoire 'demo'.
 
-  LEs fichiers temporaires dans 'temp'.
+  Les fichiers temporaires dans 'temp'.
   
   Les graphiques dans 'images'.
 
@@ -84,7 +86,6 @@ Instructions d'Utilisation :
 
 	Assurez-vous d'avoir le compilateur GCC installé.
 	La compilation se fait a travers du fichier Makefile se trouvant dans le répertoire progc. Il est possible de nettoyer manuellement ce répertoire en utilisant la commande suivante:
-
 	cd progc/
 	make clean
 	
@@ -92,11 +93,9 @@ Instructions d'Utilisation :
 Utilisation de l'application:
 
 	Une fois le projet github récupéré sur le PC, vous devez utiliser la commande suivante pour rendre le script shell exécutable:
-
 	chmod 755 Traitement.sh
-
+ 
 	Vous pouvez utilsier la commande suivante pour afficher l'aide:
-
 .	/Traitement.sh -h
 
 
