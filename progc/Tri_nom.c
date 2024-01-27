@@ -3,12 +3,14 @@
 #include <string.h>
 #include<math.h>
 
+
 //Structure représentant une ville
 typedef struct Ville{
     char * nom;
     int trajets_total;
     int trajets_depart;
 }Ville;
+
 
 // Structure d'un noeud AVL
 typedef struct AVL{
@@ -28,6 +30,8 @@ int min(int a, int b){
         return b;
     }
 }
+
+
 // Maximum
 int max(int a, int b){
     if (a > b){
@@ -42,9 +46,11 @@ int max(int a, int b){
 // Fonction qui crée un nouveau noeud
 AVL * creernoeud(Ville * v){
     AVL * noeud = malloc(sizeof(AVL));
+
     if (noeud == NULL){
         exit(1);
     }
+
     noeud->gch = NULL;
     noeud->ville = v;
     noeud->drt = NULL;
@@ -52,6 +58,7 @@ AVL * creernoeud(Ville * v){
 
     return noeud;    
 }
+
 
 // Fonction qui effectue une rotation simple gauche
 AVL* SG(AVL * a){
@@ -74,6 +81,7 @@ AVL* SG(AVL * a){
   return p;
 }
 
+
 // Fonction qui effectue une rotation simple droite
 AVL* SD(AVL * a){
   if (a == NULL) {
@@ -95,6 +103,7 @@ AVL* SD(AVL * a){
   return p;
 }
 
+
 // Fonction qui effectue une rotation double gauche
 AVL * DG(AVL * a){
   if (a == NULL) {
@@ -104,6 +113,7 @@ AVL * DG(AVL * a){
   a->drt = SD(a->drt);
   return SG(a);
 }
+
 
 // Fonction qui effectue une rotation double droite
 AVL * DD(AVL * a){
@@ -130,7 +140,6 @@ AVL * equilibre(AVL * a){
             return DG(a);
         }
     }
-
     else if(a->eq <= -2){
         if(a->gch->eq <= 0 ){
             return SD(a);
@@ -139,16 +148,17 @@ AVL * equilibre(AVL * a){
             return DD(a);
         }
     }
+
     return a;
 }
 
 
+// Fonction qui insert dans un AVL un objet de la structure Ville
 AVL * insertion_n(AVL * a, Ville * v, int * h) {
     if (a == NULL) {
         *h = 1;
         return creernoeud(v);
     } 
-
     else{
         int comp = strcmp(v->nom, a->ville->nom); // strcmp(a,b) compare a et b si a > b alors une valeur positive est renvoyée si a < b une valeur négative
         
@@ -172,7 +182,6 @@ AVL * insertion_n(AVL * a, Ville * v, int * h) {
             *h = 0;
             return a;
         }
-
     }
 
     if (*h != 0) {
@@ -184,25 +193,27 @@ AVL * insertion_n(AVL * a, Ville * v, int * h) {
             *h = 1;
         }
     }
+
     return a;
 }
-
-
 
 
 // Fonction qui récupère les données afin de les inserer dans un AVL en fonction des noms
 AVL * donnee_n(char *nom_f) {
     FILE *fichier = NULL;
     fichier = fopen(nom_f, "r");
+
     if (fichier == NULL) {
         fprintf(stderr, "Le fichier %s est inconnu \n", nom_f); // Ecrire l'erreur dans la sortie stderr
         exit(2);
     }
+
     AVL * a = NULL;
     char ligne[500];
 
     while (fgets(ligne, sizeof(ligne), fichier) != NULL) {
         char *token = strtok(ligne, ",");
+
         if (token != NULL) {
             Ville * v = malloc(sizeof(Ville));
             v->nom = strdup(token);
@@ -217,24 +228,27 @@ AVL * donnee_n(char *nom_f) {
             a = insertion_n(a, v, &h);
         }
     }
+
     fclose(fichier);
     return a;
 }
 
 
+// Fonction qui affiche l'AVL par ordre alphabetique soit un parcours suffixe
 void affichage(AVL * a, int * cpt){
     if (a != NULL && *cpt > 0) {
-            affichage(a->gch,cpt);
+        affichage(a->gch,cpt);
+
         if (*cpt > 0) {
-            // int h = 0;
             printf("%s,%d,%d\n", a->ville->nom, a->ville->trajets_total, a->ville->trajets_depart);
             (*cpt)--;
         }
            affichage(a->drt,cpt);
     }
-
 }
 
+
+// Fonction qui libère l'espace en mémoire d'un objet de la structure Ville
 void libererVille(Ville * v) {
     if (v != NULL) {
         free(v->nom);
@@ -242,6 +256,8 @@ void libererVille(Ville * v) {
     }
 }
 
+
+// Fonction qui libère l'espace en mémoire d'un AVL
 void libererAVL(AVL * a){
     if(a != NULL){
         libererAVL(a->gch);
@@ -254,15 +270,20 @@ void libererAVL(AVL * a){
 
 int main(int n, char *parametre[]){
 
+    // Test s'il y plus de 2 arguments, le premier étant le nom du script et le deuxième le fichier csv utilisé
     if ( n != 2){
         fprintf(stderr, "%s : Nombre de paramètres incorrect, un fichier est attendu \n", parametre[0]); // Ecrire l'erreur dans la sortie stderr
         return 1;
     }
+
+    // Création d'un AVL avec toute les données du fichier csv passé en paramètre
     AVL * avl = donnee_n(parametre[1]); 
     int compte  = 10;
 
     printf("Ville,Nombre de trajets,Nombre de depart\n");
+    // Affichage de 10 premières villes dans un nouveau fichier csv à la sortie un script C
     affichage(avl, &compte);
+    // Libération de la mémoire de l'AVL
     libererAVL(avl);
     return 0;
 }
