@@ -18,11 +18,11 @@ Auteurs:
 
 Le contenu du Projet:
 
-	- data 	:Le dossier contenant le fichier CSV avec les données des trajets.
-	- progc 	:LE dossier contenant le programme C et le Makefile.
-	- images	:LE dossier où seront stockées les images générées.
-	- temp 	:Le dossier pour les fichiers intermédiaires.
-	- demo 	:LE dossier pour stocker les résultats d'exécutions précédentes.
+	- data 		:Le dossier contenant le fichier CSV avec les données des trajets.
+	- progc 	:Le dossier contenant le programme C et le Makefile.
+	- images	:Le dossier où seront stockées les images générées.
+	- temp 		:Le dossier pour les fichiers intermédiaires.
+	- demo 		:Le dossier pour stocker les résultats d'exécutions précédentes.
 	- script.sh 	:Le script shell principal.
 	- README.md 	:Ce fichier
 
