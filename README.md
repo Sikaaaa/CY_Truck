@@ -38,23 +38,15 @@ Le Script Shell:
 Les Fichiers de Données :
 
   Le Fichier de données CSV d'entrée se nome 'data.csv', il est composé des informations détaillées sur les trajets routiers.
-
   Les fichiers résultats, les fichiers intermédiaires et images stockés dans le répertoire 'demo'.
-
   Les fichiers temporaires dans 'temp'.
-  
   Les graphiques dans 'images'.
-
 
 
 
 Les Fonctionnalités du Programme C:
 
 	Il se concentre sur le filtrage, le tri et les calculs des données en obeissantt au script Shell.
-
-
-
-
 
 
 Livraison du Projet:
