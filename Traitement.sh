@@ -137,15 +137,15 @@ if [ ! -f "$CheminExecutable/progc/CY_Truck_t1" ] || [ ! -f "$CheminExecutable/p
 fi
 
 # Test si les executables de l'option s existent sinon les créer
-# if [ ! -f "$CheminExecutable/progc/CY_Truck_s" ]; then
-#     cd $CheminExecutable/progc
-#     make CY_Truck_s
-#     resultat=$?
-#     if [ "$resultat" -ne 0 ]; then
-#         echo "Erreur de compilation des scripts C pour l'option s"
-#         exit 1
-#     fi
-# fi
+if [ ! -f "$CheminExecutable/progc/CY_Truck_s" ]; then
+    cd $CheminExecutable/progc
+    make CY_Truck_s
+    resultat=$?
+    if [ "$resultat" -ne 0 ]; then
+        echo "Erreur de compilation des scripts C pour l'option s"
+        exit 1
+    fi
+fi
 
 
 if [ "$faire_d1" ]; then 
@@ -360,7 +360,30 @@ fi
 
 
 if [ "$faire_s" ]; then 
-    echo "faire option -s"
-    # A finaliser
+    #echo "faire option -s"
+
+    # Création du fichier de configuration gnuplot pour l'option t
+    #Ecrire le gnu ici
+    
+    # Récupere l'heure au début de l'exécution
+    tmp_d=$(date +%s)
+            
+
+    LC_NUMERIC=C awk -F";" '{tab1[$1] += $5; tab2[$1] += 1; if(min[$1]>$5 || min[$1]=="") min[$1] = $5; if(max[$1]<$5 || max[$1]=="")max[$1]=$5}
+        END {for (i in max) printf "%d,%f,%f,%f,%f\n", i, min[i], max[i], tab1[i]/tab2[i], max[i]-min[i]}' $fichier_de_donnees > $CheminExecutable/temp/s_tri.csv 
+
+    # Appel de l'exécutable de la fonction Fonction_s qui trie dans l'ordre décroissant les données en entrée
+    $CheminExecutable/progc/CY_Truck_s $CheminExecutable/temp/s_tri.csv > $CheminExecutable/temp/s_top_50.csv 
+    resultat=$?
+    if [ "$resultat" -ne 0 ]; then
+        echo "Erreur d'execution de la fonction CY_Truck_s"
+        exit 1
+    fi
+
+    # Récupere l'heure à la fin de l'exécution
+    tmp_f=$(date +%s)
+
+    # Calcule le temps d'exécution en soustraillant les deux
+    echo "Le temps d'execution de l'option -s est de" $((tmp_f - tmp_d)) "secondes"
 
 fi
