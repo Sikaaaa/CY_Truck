@@ -4,8 +4,14 @@
 - [Groupe](#groupe) Les membres du groupe 
 - [Fichiers](#fichiers) Quels sont les fichiers et leurs fonctions
 - [Compiler](#compiler) Comment compiler le projet
+- [Prérequis](#prérequis) 
+- [Utilisation_de_l'application](#utilisation_de_l'application) Comment utiliser l'application
+- [Livraison_du_Projet](#livraison_du_Projet) 
+- [Exemples_d'Exécution](#exemples_d'Exécution ) Exemple de l'exécution du programme
 - [Répartition](#répartition) Répartition des tâches parmis les membres du groupe
 - [Sources](#sources) Les ressources sur lesquelles nous nous sommes basées
+
+
 
 ## Contenu
 
@@ -37,7 +43,7 @@ courtadeor@cy-tech.fr
   
 Le Script Shell:
 
-Il est situé à la racine du projet et il vérifie la présence de l'exécutable C, le compile si nécessaire et effectue le traitement des données en fonction des option. Il gère la création et le nettoyage des répertoires nécessaires et produit des représentations graphiques des données traitées à l'aide de Gnuplot.  
+Il est situé à la racine du projet et il vérifie la présence de l'exécutable C, le compile si nécessaire et effectue le traitement des données en fonction des options. Il gère la création et le nettoyage des répertoires nécessaires et produit des représentations graphiques des données traitées à l'aide de Gnuplot.  
   
 Les Fichiers de Données :  
   
@@ -61,7 +67,7 @@ make clean
 
 (Ce dont l'utlisateur a besoin pour executer notre projet)   
 
-## Utilisation de l'application
+## Utilisation_de_l'application
 
 Une fois le projet github récupéré sur le PC, vous devez utiliser la commande suivante pour rendre le script shell exécutable:
 ```
@@ -73,14 +79,14 @@ Vous pouvez utilsier la commande suivante pour afficher l'aide:
 ./Traitement.sh -h
 ``` 
 
-## Livraison du Projet
+## Livraison_du_Projet
 
 - Nous avons utlisé un dépôt GitHub pour la soumission du projet 
 - Mises à jour fréquentes, au moins deux fois par semaine du dépôt 
 - Un fichier ReadMe contenant des instructions de compilation et d'utilisation  
 - Exemples des résultats de l'exécution du script dans le répertoire 'demo' 
 
-## Exemples d'Exécution 
+## Exemples_d'Exécution 
 
 
 ## Répartition 
@@ -97,7 +103,7 @@ https://www.funix.org/fr/unix/awk.htm
 
 # CY_Tech
 
-Notre l'école, autrice du projet
+Notre école, autrice du projet
 
 ![CYTECH](https://github.com/Sikaaaa/CY_Truck/blob/main/CY_Tech_logo.jpg)
 
