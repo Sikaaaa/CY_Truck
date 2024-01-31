@@ -4,38 +4,23 @@
 #include <math.h>
 
 
-// Structure représentant une ville
-typedef struct Ville{
-    char * nom;
-    int trajets_total;
-    int trajets_depart;
-}Ville;
+// Structure représentant un trajet
+typedef struct Trajet{
+    int id;
+    float mini;
+    float maxi;
+    float moy;
+    float maxmin;
+}Trajet;
 
 
 // Structure d'un noeud AVL
 typedef struct AVL{
-    Ville * ville;
+    Trajet * trajet;
     struct AVL* gch;
     struct AVL* drt;
     int eq;
 }AVL;
-
-
-// Fonction qui crée un nouveau noeud
-AVL * creernoeud(Ville * v){
-    AVL * noeud = malloc(sizeof(AVL));
-
-    if (noeud == NULL){
-        exit(1);
-    }
-
-    noeud->gch = NULL;
-    noeud->ville = v;
-    noeud->drt = NULL;
-    noeud->eq = 0;
-
-    return noeud;    
-}
 
 
 // Fonction qui trouve le minimum
@@ -153,35 +138,51 @@ AVL * equilibre(AVL * a){
 }
 
 
-// Fonction qui insert dans un AVL un objet de la structure Ville
-AVL * insertion_t(AVL * a, Ville * v, int * h){
-    if(a == NULL){
-        *h = 1;
-        return creernoeud(v);
+// Fonction qui crée un nouveau noeud
+AVL * creernoeud(Trajet * t){
+    AVL * noeud = malloc(sizeof(AVL));
+
+    if (noeud == NULL){
+        exit(1);
     }
-    else if(a->ville->trajets_total > v->trajets_total){
-        a->gch = insertion_t(a->gch,v,h);
+
+    noeud->gch = NULL;
+    noeud->trajet = t;
+    noeud->drt = NULL;
+    noeud->eq = 0;
+
+    return noeud;    
+}
+
+
+// Fonction qui insert dans un AVL un objet de la structure Trajet
+AVL * insertion(AVL * a, Trajet * t, int * h){
+    if( a == NULL){
+        *h = 1;
+        return creernoeud(t);
+    }
+    else if(a->trajet->maxmin > t->maxmin){
+        a->gch = insertion(a->gch,t,h);
         *h = -*h;
     }
-    else if(a->ville->trajets_total < v->trajets_total){
-        a->drt = insertion_t(a->drt,v,h);
+    else if(a->trajet->maxmin < t->maxmin){
+        a->drt = insertion(a->drt,t,h);
     }
-    else if(v->trajets_total == a->ville->trajets_total){
-        int cmp = strcmp(v->nom, a->ville->nom);
-        if(cmp > 0){
-            a->drt = insertion_t(a->drt,v,h);
-        }
-        else{
-            a->gch = insertion_t(a->gch,v,h);
+    else if (a->trajet->maxmin == t->maxmin){
+        if(a->trajet->id > t->id){
+            a->gch = insertion(a->gch,t,h);
             *h = -*h;
         }
+        else{
+            a->drt = insertion(a->drt,t,h);
+        }
     }
-    else{ 
+    else{
         *h = 0;
         return a;
     }
 
-    if(*h != 0){
+    if( *h != 0 ){
         a->eq = a->eq + *h;
         a = equilibre(a);
         if(a->eq == 0){
@@ -192,12 +193,12 @@ AVL * insertion_t(AVL * a, Ville * v, int * h){
         }
     }
 
-    return a;       
+    return a;
 }
 
 
 // Fonction qui récupère les données afin de les inserer dans un AVL en fonction des trajets
-AVL * donnee_t(char *nom_f) {
+AVL * donnee(char *nom_f) {
     FILE *fichier = NULL;
     fichier = fopen(nom_f, "r");
 
@@ -212,17 +213,23 @@ AVL * donnee_t(char *nom_f) {
         char *token = strtok(ligne, ",");
 
         if (token != NULL) {
-            Ville * v = malloc(sizeof(Ville));
-            v->nom = strdup(token);
+            Trajet * t = malloc(sizeof(Trajet));
+            t->id = atoi(token);
 
             token = strtok(NULL, ",");
-            v->trajets_total= atoi(token);
+            t->mini= atof(token);
 
             token = strtok(NULL, ",");
-            v->trajets_depart = atoi(token);
+            t->maxi = atof(token);
+
+            token = strtok(NULL, ",");
+            t->moy = atof(token);
+
+            token = strtok(NULL, ",");
+            t->maxmin = atof(token);
 
             int h = 0;
-            a = insertion_t(a, v, &h);
+            a = insertion(a,t,&h);
         }
     }
 
@@ -237,19 +244,17 @@ void affichage(AVL * a, int * cpt){
         affichage(a->drt,cpt);
 
         if (*cpt > 0) {
-            printf("%s,%d,%d\n", a->ville->nom, a->ville->trajets_total, a->ville->trajets_depart);
+            printf("%d,%f,%f,%f,%f\n", a->trajet->id, a->trajet->mini, a->trajet->maxi, a->trajet->moy, a->trajet->maxmin);
             (*cpt)--;
         }
            affichage(a->gch,cpt);
     }
 }
 
-
-// Fonction qui libère l'espace en mémoire d'un objet de la structure Ville
-void libererVille(Ville * v) {
-    if (v != NULL) {
-        free(v->nom);
-        free(v);
+// Fonction qui libère l'espace en mémoire d'un objet de la structure trajet
+void libererTrajet(Trajet * t) {
+    if (t != NULL) {
+        free(t);
     }
 }
 
@@ -259,11 +264,10 @@ void libererAVL(AVL * a){
     if(a != NULL){
         libererAVL(a->gch);
         libererAVL(a->drt);
-        libererVille(a->ville);
+        libererTrajet(a->trajet);
         free(a);
     }
 }
-
 
 int main(int n, char *parametre[]){
     
@@ -274,10 +278,11 @@ int main(int n, char *parametre[]){
     }
 
     // Création d'un AVL avec toute les données du fichier csv passé en paramètre
-    AVL * avl = donnee_t(parametre[1]); 
-    int compte  = 10;
+    AVL * avl = donnee(parametre[1]); 
+    int compte  = 50;
     
-    // Affichage de 10 premières villes dans un nouveau fichier csv à la sortie un script C
+    printf("Id_route,Minimum,Maximum,Moyen,Maximum-Minimum\n");
+    // Affichage de 50 premières villes dans un nouveau fichier csv à la sortie un script C
     affichage(avl, &compte);
     // Libération de la mémoire de l'AVL
     libererAVL(avl);
