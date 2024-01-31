@@ -4,7 +4,7 @@
 #include <math.h>
 
 
-//Structure représentant un trajet
+// Structure représentant un trajet
 typedef struct Trajet{
     int id;
     float mini;
@@ -23,7 +23,7 @@ typedef struct AVL{
 }AVL;
 
 
-// Minimum
+// Fonction qui trouve le minimum
 int min(int a, int b){
     if (a < b){
         return a;
@@ -34,7 +34,7 @@ int min(int a, int b){
 }
 
 
-// Maximum
+// Fonction qui trouve le maximum
 int max(int a, int b){
     if (a > b){
         return a;
@@ -155,6 +155,7 @@ AVL * creernoeud(Trajet * t){
 }
 
 
+// Fonction qui insert dans un AVL un objet de la structure Trajet
 AVL * insertion(AVL * a, Trajet * t, int * h){
     if( a == NULL){
         *h = 1;
@@ -250,10 +251,9 @@ void affichage(AVL * a, int * cpt){
     }
 }
 
-// Fonction qui libère l'espace en mémoire d'un objet de la structure Ville
-void libererVille(Trajet * t) {
+// Fonction qui libère l'espace en mémoire d'un objet de la structure trajet
+void libererTrajet(Trajet * t) {
     if (t != NULL) {
-        //free(t->id);
         free(t);
     }
 }
@@ -264,7 +264,7 @@ void libererAVL(AVL * a){
     if(a != NULL){
         libererAVL(a->gch);
         libererAVL(a->drt);
-        libererVille(a->trajet);
+        libererTrajet(a->trajet);
         free(a);
     }
 }

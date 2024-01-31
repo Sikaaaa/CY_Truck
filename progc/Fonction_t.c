@@ -4,7 +4,7 @@
 #include <math.h>
 
 
-//Structure représentant une ville
+// Structure représentant une ville
 typedef struct Ville{
     char * nom;
     int trajets_total;
@@ -38,7 +38,7 @@ AVL * creernoeud(Ville * v){
 }
 
 
-// Minimum
+// Fonction qui trouve le minimum
 int min(int a, int b){
     if (a < b){
         return a;
@@ -49,7 +49,7 @@ int min(int a, int b){
 }
 
 
-// Maximum
+// Fonction qui trouve le maximum
 int max(int a, int b){
     if (a > b){
         return a;
