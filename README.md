@@ -25,12 +25,7 @@ Le but de ce projet est de faire des tris à partir des données d'une entrepris
 ## Groupe 
 
 Notre groupe est composé d'Orianne COURTADE, Héloïse DEY et Maellys AMAINI  
-En cas de questions, de commentaires et ou de problemes vous pouvez contacter les auteurs du programmes.  
-  
-amainimaellys@cy-tech.fr  
-deyheloise@cy-tech.fr  
-courtadeor@cy-tech.fr  
-  
+
 
 ## Fichiers
 
