@@ -3,6 +3,11 @@
 
 # Création du message d'aide 
 message_h(){
+    echo "Utilisation: $(basename $0) <fichier de données> [-h] [-d1] [-d2] [-l] [-t] [-s]"
+    echo ""
+    echo "Paramètres obligatoires:"
+    echo "  <fichier de données> : Chemin du fichier de données"
+    echo ""
     echo "Pour choisir les options de graphiques il est possible de faire :"
     echo " -d1 pour avoir les 10 conducteurs avec le plus de trajets à leur actif"
     echo " -d2 pour avoir les 10 conducteurs ayant parcouru le plus de kilomètres"
