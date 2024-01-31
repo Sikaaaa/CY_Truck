@@ -16,7 +16,6 @@ fichier_de_donnees=$1
 shift
 
 if [ "$fichier_de_donnees" == "-h"  ]; then
-            #echo "option -h"
             message_h
             exit 0  
 fi
@@ -40,10 +39,8 @@ while getopts ":hd:lts" arg; do
 
         d) # Les options qui commencent par d et qui doivent avoir un argument supplémentaire
             if [ ${OPTARG} -eq "1" ]; then
-                #echo "option -d1"
                 faire_d1=true
             elif [ ${OPTARG} -eq "2" ]; then
-                #echo "option -d2"
                 faire_d2=true
             else
                 echo "option -d${OPTARG} invalide"
@@ -87,8 +84,6 @@ done
 
 # Récupération du chemin absolu du fichier d'entrée
 fichier_de_donnees=$(realpath -s $fichier_de_donnees)
-
-# echo "DEBUG: fichier_de_donnees=$fichier_de_donnees"
 
 # Teste si le fichier passé en paramètre existe
 if [ ! -f "$fichier_de_donnees" ]; then
@@ -149,12 +144,12 @@ fi
 
 
 if [ "$faire_d1" ]; then 
-    # echo "faire option -d1"
+    # Les 10 conducteurs avec le plus de trajets 
 
     # Création du fichier de configuration gnuplot pour l'option d1
     cat <<EOF > $CheminExecutable/scriptgnu/d1.gnu
 # Paramètres du graphique
-set terminal png
+set terminal pngcairo size 1080,1920 enhanced font 'Times New Roman, 13'
 set xlabel "Conducteurs"
 set y2label "Nombre de Trajets"
 set ylabel "Les dix meilleurs chauffeurs"
@@ -172,7 +167,6 @@ set xtics rotate
 set ytics rotate
 set y2tics rotate
 unset ytics; set y2tics mirror
-set terminal pngcairo size 1080,1920 enhanced font 'Times New Roman, 13'
 
 
 # Charger les données depuis le fichier
@@ -195,18 +189,20 @@ EOF
 
     # Générer le graphique
     gnuplot $CheminExecutable/scriptgnu/d1.gnu
-    convert -rotate 90 $CheminExecutable/images/Le_plus_de_trajet.png $CheminExecutable/images/Le_plus_de_trajet1.png
+    # Faire une rotation à 90° de l'image
+    convert -rotate 90 $CheminExecutable/images/Le_plus_de_trajet.png $CheminExecutable/images/option_d1.png
+    # Supprimer l'image temporaire
     rm -f $CheminExecutable/images/Le_plus_de_trajet.png
 
 fi
 
 if [ "$faire_d2" ]; then
-    #echo "faire option -d2" # Récupérer les 10 conducteurs avec le plus de km au compteur
+    # Récupérer les 10 conducteurs avec le plus de km au compteur
 
     # Création du fichier de configuration gnuplot pour l'option d2
     cat <<EOF > $CheminExecutable/scriptgnu/d2.gnu
 # Paramètres du graphique
-set terminal png
+set terminal pngcairo size 1080,1920 enhanced font 'Times New Roman, 13'
 set xlabel "Conducteurs"
 set y2label "Nombre de km"
 set ylabel "Les conducteurs avec le plus de km au compteur"
@@ -226,7 +222,6 @@ set xtics rotate
 set ytics rotate
 set y2tics rotate
 unset ytics; set y2tics mirror
-set terminal pngcairo size 1080,1920 enhanced font 'Times New Roman, 13'
 
 
 # Charger les données depuis le fichier
@@ -249,13 +244,15 @@ EOF
        
     # Générer le graphique
     gnuplot $CheminExecutable/scriptgnu/d2.gnu 
-    convert -rotate 90 $CheminExecutable/images/Les_conducteurs_avec_le_plus_de_km.png $CheminExecutable/images/Les_conducteurs_avec_le_plus_de_km1.png  
+    # Faire une rotation à 90° de l'image
+    convert -rotate 90 $CheminExecutable/images/Les_conducteurs_avec_le_plus_de_km.png $CheminExecutable/images/option_d2.png  
+    # Supprimer l'image temporaire
     rm -f $CheminExecutable/images/Les_conducteurs_avec_le_plus_de_km.png
 
 fi
 
 if [ "$faire_l" ]; then
-    #echo "faire option -l"     # Les 10 trajets les plus longs
+    # Les 10 trajets les plus longs
 
     # Création du fichier de configuration gnuplot pour l'option l
     cat <<EOF > $CheminExecutable/scriptgnu/l.gnu
@@ -266,7 +263,7 @@ set ylabel "Distance en km"
 set xlabel "Id Route"
 
 #nom du fichier dans lequel le graphique apparaitra 
-set output "/$CheminExecutable/images/Les_10_trajets_les_plus_longs.png" 
+set output "/$CheminExecutable/images/option_l.png" 
 
 # Type de graphique
 set style fill solid
@@ -303,7 +300,7 @@ fi
 
 
 if [ "$faire_t" ]; then 
-    #echo "faire option -t"
+    # Le nombre de fois ou la ville est traversée
 
     # Création du fichier de configuration gnuplot pour l'option t
     cat <<EOF > $CheminExecutable/scriptgnu/t.gnu
@@ -314,7 +311,7 @@ set xlabel "Noms de villes"
 set ylabel "Nombre de routes"
 
 #nom du fichier dans lequel le graphique apparaitra 
-set output "$CheminExecutable/images/Les_10_villes_les_plus_traversées.png"
+set output "$CheminExecutable/images/option_t.png"
 
 #type de graphique 
 set style data histograms 
@@ -355,20 +352,43 @@ EOF
 
     # Calcule le temps d'exécution en soustraillant les deux
     echo "Le temps d'execution de l'option -t est de" $((tmp_f - tmp_d)) "secondes"
+
+    # Générer le graphique
     gnuplot $CheminExecutable/scriptgnu/t.gnu
 fi
 
 
 if [ "$faire_s" ]; then 
-    #echo "faire option -s"
+    # Statistiques de chaque trajet
 
-    # Création du fichier de configuration gnuplot pour l'option t
-    #Ecrire le gnu ici
-    
+    # Création du fichier de configuration gnuplot pour l'option s
+    cat <<EOF > $CheminExecutable/scriptgnu/s.gnu
+# Paramètres du graphique 
+set terminal pngcairo size 1920,1080 enhanced font 'Times New Roman, 13'
+set title "Distances des trajets (min, moyenne, max) pour les 50 premières valeurs"
+set xlabel "Identifiants des trajets"
+set ylabel "Distances (km)"
+
+# Nom du fichier dans lequel le graphique apparaïtra
+set output '$CheminExecutable/images/option_s.png'
+
+# Tourner les id routes pour mieux de visibilité 
+set xtics autofreq nomirror rotate by 60 right
+
+# Style pour la courbe de la moyenne 
+set style line 100 lc rgb "black" lw 0.5
+
+# Charger les données depuis le fichier 
+set datafile separator ','
+plot '$CheminExecutable/temp/s_top_50.csv' using (2*\$0+1):4:xticlabel(1) with lines lt -1 lw 2 title 'Moyenne', \
+    '' using (2*\$0+1):2:3 with filledcurves lc rgb "#CEA3FF" fs transparent solid 0.5 title 'Min/Max'
+
+EOF
+
     # Récupere l'heure au début de l'exécution
     tmp_d=$(date +%s)
             
-
+    # Calcule la distance minimale, maixmale et moyenne de chaque étape pour chaque tajet
     LC_NUMERIC=C awk -F";" '{tab1[$1] += $5; tab2[$1] += 1; if(min[$1]>$5 || min[$1]=="") min[$1] = $5; if(max[$1]<$5 || max[$1]=="")max[$1]=$5}
         END {for (i in max) printf "%d,%f,%f,%f,%f\n", i, min[i], max[i], tab1[i]/tab2[i], max[i]-min[i]}' $fichier_de_donnees > $CheminExecutable/temp/s_tri.csv 
 
@@ -385,5 +405,8 @@ if [ "$faire_s" ]; then
 
     # Calcule le temps d'exécution en soustraillant les deux
     echo "Le temps d'execution de l'option -s est de" $((tmp_f - tmp_d)) "secondes"
+    
+    # Générer le graphique
+    gnuplot $CheminExecutable/scriptgnu/s.gnu
 
 fi
