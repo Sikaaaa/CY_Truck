@@ -38,7 +38,7 @@ CheminExecutable=$(cd `dirname $0`; pwd)
 
 
 # Récupération des arguments d'appel du script
-# ":hd:lts" --> On autorise les options -h, -l, -t, -s ou -d suivi d'un argument 
+# ":hd:lts" --> On autorise les options -h, -l, -t, -s ou -d suivi d'un argument, permet de prendre plusieurs arguments à la fois 
 while getopts ":hd:lts" arg; do
     case ${arg} in
 
